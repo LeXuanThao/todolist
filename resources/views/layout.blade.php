@@ -3,13 +3,13 @@
     <head>
         <meta charset="utf-8">
         <title>Todolist System</title>
+        <link rel="stylesheet" href="{{asset('css/bootstrap-datepicker.min.css')}}"/>
         <link rel="stylesheet" href="{{mix('css/app.css')}}"/>
         <script>
             window.Laravel = '{{json_encode(["csrfToken"=>csrf_token()])}}';
         </script>
         <script type="text/javascript" src="{{mix('js/manifest.js')}}"></script>
         <script type="text/javascript" src="{{mix('js/vendor.js')}}"></script>
-        <script type="text/javascript" src="{{mix('js/bootstrap-datetimepicker.min.js')}}"></script>
         <script type="text/javascript" src="{{mix('js/app.js')}}"></script>
     </head>
     <body>
@@ -31,7 +31,11 @@
                             <textarea name="description" id="desc" class="form-control"></textarea>
                         </div>
                         <div class="form-group">
-                            <input type="submit" name="creat_task" value="Create Task" class="btn btn-primary"/>
+                            <label for="deadline">Deadline:</label>
+                            <input type="text" id="deadline" name="deadline" value="" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <button id="creat_task" class="btn btn-primary">Create Task</button>
                         </div>
                     </form>
                 </div>
@@ -53,18 +57,37 @@
 
                 $('#new_task').submit(function(e){
                     e.preventDefault();
-
+                        title = $("#title").val();
+                        descr = $("#desc").val();
+                        deadline = $('#deadline').val();
+                        $.ajax({
+                            url: '/api/task',
+                            method: 'POST',
+                            data: {title:title,description:descr,deadline:deadline}
+                        }).done(function($data){
+                            if ($data.success) {
+                                updateTask($data.data);
+                            }
+                        });
                     return false;
                 })
             })($);
 
             function initTasks($data) {
                 if ($data!=null) {
-                    $.each($data, function($i,$k){
-                        console.log($i);
+                    $.each($data, function($i,$el){
+                        html = '<li id="'+$el.id+'">'+$el.name+'</li>';
+                        $('#tasks').append(html);
                     });
                 }
             }
+
+            function updateTask($data){
+                html = '<li id="'+$data.id+'">'+$data.name+'</li>';
+                $('#tasks').append(html);
+            }
+
+            $('#deadline').datepicker({format:'yyyy-mm-dd'});
         </script>
     </body>
 </html>

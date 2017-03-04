@@ -12,8 +12,7 @@ const { mix } = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .js('resources/assets/libraries/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js', 'public/js')
-    .sass('resources/assets/libraries/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css', 'public/css')
     .sass('resources/assets/sass/app.scss', 'public/css')
-    .extract(['jquery','bootstrap-sass'])
+    .copy('node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 'public/css')
+    .extract(['jquery','bootstrap-sass','bootstrap-datepicker'])
     .version();
