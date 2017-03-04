@@ -12,5 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout');
+});
+
+Route::get('/demo',function() {
+    return 'Htacess Running';
+});
+
+Route::get('test',function(){
+    return view('test.test');
 });
